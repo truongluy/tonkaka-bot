@@ -1,23 +1,35 @@
 import os
+from flask import Flask, request
+from aiogram import Bot, Dispatcher, types
+from aiogram.types import Update
 import asyncio
-import threading
-from flask import Flask
-from app.bot import run_bot
 
-# Tạo Flask app để Render thấy port
+TOKEN = os.getenv("BOT_TOKEN")
+WEBHOOK_PATH = f"/webhook/{TOKEN}"
+WEBHOOK_URL = f"{os.getenv('RENDER_EXTERNAL_URL')}{WEBHOOK_PATH}"
+
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return "Bot is running!"
+# --------- Handlers ----------
+@dp.message()
+async def handle_message(message: types.Message):
+    await message.answer(f"Hello {message.from_user.first_name}, đây là bot webhook trên Render!")
 
-def run_flask():
-    port = int(os.environ.get("PORT", 5000))  # Render sẽ set biến PORT
-    app.run(host="0.0.0.0", port=port)
+# --------- Webhook Endpoint ----------
+@app.route(WEBHOOK_PATH, methods=["POST"])
+async def webhook():
+    update = Update.model_validate(request.json, context={"bot": bot})
+    await dp.feed_update(bot, update)
+    return "OK"
+
+# --------- Setup Webhook ----------
+@app.before_first_request
+def setup_webhook():
+    asyncio.get_event_loop().run_until_complete(bot.set_webhook(WEBHOOK_URL))
+    print(f"Webhook set: {WEBHOOK_URL}")
 
 if __name__ == "__main__":
-    # Chạy Flask server trên thread riêng
-    threading.Thread(target=run_flask).start()
-
-    # Chạy bot Telegram
-    asyncio.run(run_bot())
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 10000)))

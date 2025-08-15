@@ -1,4 +1,4 @@
-aiogram==3.12.0
+aiogram==3.4.1
 pydantic==2.8.2
 pydantic-settings==2.3.4
 tonsdk==1.0.14
