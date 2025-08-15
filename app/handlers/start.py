@@ -1,6 +1,7 @@
 
 from aiogram import Router
 from aiogram.types import Message
+from aiogram.filters import Command
 
 router = Router()
 
@@ -13,11 +14,10 @@ WELCOME = (
     "• /referral — lấy link giới thiệu\n"
     "• /health — kiểm tra bot"
 )
+@router.message(Command("start", "help"))
 
-@router.message(commands=['start'])
 async def cmd_start(message: Message):
     await message.answer(WELCOME, parse_mode='Markdown')
 
-@router.message(commands=['help'])
 async def cmd_help(message: Message):
     await message.answer('Các lệnh hiện có:\n/start\n/help\n/create\n/referral\n/health')
