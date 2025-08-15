@@ -1,25 +1,15 @@
 
 import asyncio
 import logging
-from aiogram import Bot, Dispatcher
-from aiogram.types import Message
-from aiogram.filters import Command
-from config import settings
-
-logging.basicConfig(level=logging.INFO)
-
-bot = Bot(token=settings.BOT_TOKEN)
-dp = Dispatcher()
-
-@dp.message(Command("start"))
-async def cmd_start(message: Message):
-    await message.answer("Xin chào! Đây là TON Mini Bot. Gõ /help để xem lệnh.")
-
-@dp.message(Command("help"))
-async def cmd_help(message: Message):
-    await message.answer("Các lệnh có sẵn:\n/start - bắt đầu\n/help - trợ giúp\n/create - tạo token (chưa code)\n/game - chơi game (chưa code)\n/referral - xem ref (chưa code)")
+from app.bot import bot, dp
+from app.commands import start, create, referral, game
 
 async def main():
+    logging.getLogger(__name__).info("Starting TON Mini Bot...")
+    dp.include_router(start.router)
+    dp.include_router(create.router)
+    dp.include_router(referral.router)
+    dp.include_router(game.router)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

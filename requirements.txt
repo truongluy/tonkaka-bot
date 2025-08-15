@@ -1,4 +1,3 @@
 
-aiogram==3.*
-pydantic
-pip install pydantic-settings
+aiogram==3.4.1
+pydantic-settings==2.3.4

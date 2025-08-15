@@ -1,23 +1,29 @@
 
-# TON Mini Bot
+# TON Mini Bot (Render-ready)
 
-Bot Telegram cho TON blockchain — hỗ trợ tạo token nhanh, auto list DEX, mini game và affiliate.
+Bot Telegram mẫu cho hệ sinh thái TON — tách module rõ ràng, tối ưu deploy Background Worker trên Render.
 
-## Cấu trúc dự án
-- `bot/commands/` — các lệnh bot (`/create`, `/game`, `/referral`, ...)
-- `ton/` — xử lý blockchain TON (tạo token, kết nối DEX)
-- `db/` — lưu dữ liệu user, token, game, referral
-- `config.py` — đọc biến môi trường
-- `main.py` — entry point
-
-## Chạy thử
+## Chạy local
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env
-# Sửa BOT_TOKEN trong .env
+cp .env.example .env  # điền BOT_TOKEN
 python main.py
 ```
 
-Sau khi chạy, gõ /start hoặc /help trong Telegram để kiểm tra bot.
+## Deploy Render (Background Worker)
+- **Build command**:
+```
+pip install -r requirements.txt
+```
+- **Start command**:
+```
+python main.py
+```
+- **Env vars**: thêm `BOT_TOKEN` trong Dashboard Render.
+
+## Mở rộng
+- Triển khai thật TON: thay `app/services/ton_utils.py` bằng gọi SDK (tonsdk/tonpy)
+- Auto-list DEX: viết trong `app/services/dex_utils.py`
+- Referral nâng cao + DB: thêm module DB (SQLite/Postgres) và lưu ref/link/point.
