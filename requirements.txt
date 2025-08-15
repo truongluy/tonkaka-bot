@@ -1,6 +1,6 @@
 aiogram==3.4.1
-pydantic==2.8.2
-pydantic-settings==2.3.4
+pydantic
+pydantic-settings
 tonsdk==1.0.14
 aiofiles==23.2.1
 Flask==3.0.3
